@@ -1,13 +1,21 @@
 import { test, expect } from "@playwright/test";
+import { getUser } from "./data/user";
 
-import {
-  user
-} from "./data/user";
+test("should retrieve the standard user", async () => {
+    const standardUser = getUser("standard");
 
-test("user test data should be valid", async () => {
-  expect(user.username).toBe("standard_user");
+    expect(standardUser.username).toBe("standard_user");
+    expect(standardUser.password).toBe("secret_sauce");
+    expect(standardUser.loginAttempts).toBe(3);
+});
 
-expect(user.password).toBe("secret_sauce");
+test("should retrieve the admin-labelled test user", async () => {
+    const adminUser = getUser("admin");
 
-expect(user.loginAttempts).toBe(3);
+    expect(adminUser.username).toBe("performance_glitch_user");
+});
+
+test("should be able to retrieve the manager labelled test user", async() => {
+    const managerUser = getUser("manager");
+    expect(managerUser.username).toBe("problem_user")
 });
