@@ -1,24 +1,19 @@
 import type { User } from "../types/user";
-import type { Role } from "../types/role";
 
-export const user: Record<Role, User> = {
+export const users = {
     standard: {
         username: "standard_user",
         password: "secret_sauce",
         loginAttempts: 3,
     },
-    manager: {
+    problem: {
         username: "problem_user",
         password: "secret_sauce",
         loginAttempts: 2,
     },
-    admin: {
+    performanceGlitch: {
         username: "performance_glitch_user",
         password: "secret_sauce",
         loginAttempts: 1,
     },
-};
-
-export function getUser(role: Role): User {
-    return user[role];
-}
+} satisfies Record<string, User>;

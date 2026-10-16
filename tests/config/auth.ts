@@ -1,0 +1,1 @@
+export const standardAuthState = "playwright/.auth/standard.json";

@@ -1,7 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('homepage should load successfully', async ({ page }) => {
-  await page.goto('/');
+test("SauceDemo homepage should load", async ({ page }) => {
+    await page.goto("/");
 
-  await expect(page).toHaveTitle(/Swag Labs/);
+    await expect(page).toHaveTitle(/Swag Labs/);
+    await expect(page.locator("#login-button")).toBeVisible();
 });

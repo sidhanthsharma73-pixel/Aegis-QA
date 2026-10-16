@@ -1,22 +1,24 @@
-import { test } from "./fixture/test";
-import { expect } from "@playwright/test";
-import { user } from "./data/user";
+import { test, expect } from "@playwright/test";
+import { users } from "./data/user";
 
-test.use({
-    storageState: undefined,
+test("should retrieve the standard user", async () => {
+    const standardUser = users.standard;
+
+    expect(standardUser.username).toBe("standard_user");
+    expect(standardUser.password).toBe("secret_sauce");
+    expect(standardUser.loginAttempts).toBe(3);
 });
 
-test("user should be able to log in successfully", async ({ page, loginPage }) => {
-    await page.goto("/");
+test("should retrieve the performance-glitch test user", async () => {
+    const performanceGlitchUser = users.performanceGlitch;
 
-    await loginPage.login(
-        user.username,
-        user.password
+    expect(performanceGlitchUser.username).toBe(
+        "performance_glitch_user",
     );
+});
 
-    await expect(page).toHaveURL(/inventory.html/);
+test("should retrieve the problem test user", async () => {
+    const problemUser = users.problem;
 
-    await expect(
-        page.locator(".title")
-    ).toHaveText("Products");
+    expect(problemUser.username).toBe("problem_user");
 });

@@ -1,21 +1,43 @@
-import { test as base, Page } from "@playwright/test";
+import { test as base, expect, type Page } from "@playwright/test";
+
 import { LoginPage } from "../pages/login.page";
-import { user } from "../data/user";
+import { standardAuthState } from "../config/auth";
+import { createAuthenticatedPage } from "../utils/authenticated-page";
 
-export const test = base.extend<{
-  loginPage: LoginPage;
-  authenticatedPage: Page;
-}>({
-  loginPage: async ({ page }, use) => {
-    await use(new LoginPage(page));
-  },
+type CustomFixtures = {
+    loginPage: LoginPage;
+    authenticatedPage: Page;
+    standardPage: Page;
+};
 
-  authenticatedPage: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
+export const test = base.extend<CustomFixtures>({
+    loginPage: async ({ page }, use) => {
+        const loginPage = new LoginPage(page);
 
-    await page.goto("/");
-    await loginPage.login(user.username, user.password);
+        await use(loginPage);
+    },
 
-    await use(page);
-  },
+    authenticatedPage: async ({ page }, use) => {
+        await page.goto("/inventory.html");
+
+        await expect(page).toHaveURL(/inventory\.html/);
+        await expect(page.locator(".inventory_list")).toBeVisible();
+
+        await use(page);
+    },
+
+    standardPage: async ({ browser }, use) => {
+        const authenticated = await createAuthenticatedPage(
+            browser,
+            standardAuthState,
+        );
+
+        try {
+            await use(authenticated.page);
+        } finally {
+            await authenticated.close();
+        }
+    },
 });
+
+export { expect };
