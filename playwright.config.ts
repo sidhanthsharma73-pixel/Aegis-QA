@@ -35,7 +35,10 @@ export default defineConfig({
 
             testMatch: /.*\.spec\.ts/,
 
-            testIgnore: /.*\.setup\.spec\.ts/,
+            testIgnore: [
+                /.*\.setup\.spec\.ts/,
+                /.*\/api\/.*\.spec\.ts/,
+            ],
 
             use: {
                 ...devices["Desktop Chrome"],
@@ -45,5 +48,11 @@ export default defineConfig({
 
             dependencies: ["setup"],
         },
+        {
+            name: "api",
+
+            testMatch: /.*\/api\/.*\.spec\.ts/,
+
+        }
     ],
 });
