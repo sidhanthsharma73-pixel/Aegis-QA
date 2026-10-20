@@ -51,3 +51,12 @@ test('GET /posts/0 checks the zero ID boundary', async ({ request }) => {
 
 
 });
+
+test('GET /posts/abc handles a non-numeric ID', async ({ request }) => {
+  const response = await request.get('/posts/abc');
+
+  expect(response.status()).toBe(404);
+
+  const body = await response.json();
+  expect(Object.keys(body)).toHaveLength(0);
+});
