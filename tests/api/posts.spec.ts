@@ -11,9 +11,12 @@ test('GET /posts/1 returns a valid post', async ({ request }) => {
 
   const body = await response.json();
 
+  expect(body.userId).toEqual(expect.any(Number));
   expect(body.id).toBe(1);
   expect(typeof body.title).toBe('string');
   expect(body.title.length).toBeGreaterThan(0);
+  expect(typeof body.body).toBe('string');
+  expect(body.body.length).toBeGreaterThan(0);
 });
 
 test('GET /posts/2 returns the correct post', async ({ request }) => {
