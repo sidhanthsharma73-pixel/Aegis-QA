@@ -27,3 +27,27 @@ test('GET /posts/2 returns the correct post', async ({ request }) => {
 
   expect(body.id).toBe(2);
 });
+
+
+test('Get /posts/9999 returns not found', async ({ request }) => {
+  const postsApi = new PostsApi(request);
+  const response = await postsApi.getPost(9999);
+
+  expect(response.status()).toBe(404);
+
+  const body = await response.json();
+  expect(Object.keys(body)).toHaveLength(0);
+});
+
+
+test('GET /posts/0 checks the zero ID boundary', async ({ request }) => {
+  const postsApi = new PostsApi(request);
+  const response = await postsApi.getPost(0);
+
+  expect(response.status()).toBe(404);
+
+  const body = await response.json();
+  expect(Object.keys(body)).toHaveLength(0);
+
+
+});
