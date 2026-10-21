@@ -1,4 +1,4 @@
-
+import { postSchema } from './post.schema';
 import { test, expect } from '@playwright/test';
 import { PostsApi } from './posts.api';
 import type { Post } from './post.types';
@@ -11,6 +11,7 @@ test('GET /posts/1 returns a valid post', async ({ request }) => {
   expect(response.status()).toBe(200);
 
   const body: Post = await response.json();
+  postSchema.parse(body);
   expect(body.userId).toEqual(expect.any(Number));
   expect(body.id).toBe(1);
   expect(typeof body.title).toBe('string');
@@ -28,6 +29,8 @@ test('GET /posts/2 returns the correct post', async ({ request }) => {
   expect(response.status()).toBe(200);
 
   const body: Post = await response.json();
+  postSchema.parse(body);
+
 
   expect(body.id).toBe(2);
 });
@@ -39,7 +42,8 @@ test('Get /posts/9999 returns not found', async ({ request }) => {
 
   expect(response.status()).toBe(404);
 
-  const body: Post = await response.json();
+  const body = await response.json();
+
   expect(Object.keys(body)).toHaveLength(0);
 });
 
@@ -50,9 +54,9 @@ test('GET /posts/0 checks the zero ID boundary', async ({ request }) => {
 
   expect(response.status()).toBe(404);
 
-  const body: Post = await response.json();
-  expect(Object.keys(body)).toHaveLength(0);
+  const body = await response.json();
 
+  expect(Object.keys(body)).toHaveLength(0);
 
 });
 
@@ -61,6 +65,17 @@ test('GET /posts/abc handles a non-numeric ID', async ({ request }) => {
 
   expect(response.status()).toBe(404);
 
-  const body: Post = await response.json();
+  const body = await response.json();
+
   expect(Object.keys(body)).toHaveLength(0);
+});
+
+test('Post schema rejects an invalid title type', () => {
+  const invalidPost = {
+    userId: 1,
+    id: 1,
+    title: 123,
+    body: 'Example content',
+  };
+  expect(() => postSchema.parse(invalidPost)).toThrow();
 });
