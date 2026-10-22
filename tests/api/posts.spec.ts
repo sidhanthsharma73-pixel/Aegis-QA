@@ -1,7 +1,7 @@
 import { postSchema } from './post.schema';
 import { test, expect } from '@playwright/test';
 import { PostsApi } from './posts.api';
-import type { Post } from './post.types';
+import type { Post } from './post.schema';
 
 test('GET /posts/1 returns a valid post', async ({ request }) => {
   const postsApi = new PostsApi(request);
