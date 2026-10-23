@@ -90,3 +90,13 @@ test('Post schema rejects an empty title', () => {
 
   expect(() => postSchema.parse(invalidPost)).toThrow();
 });
+
+test('Post schema rejects a missing body', () => {
+  const invalidPost = {
+    userId: 1,
+    id: 1,
+    title: 'Example post',
+  };
+
+  expect(() => postSchema.parse(invalidPost)).toThrow();
+});
