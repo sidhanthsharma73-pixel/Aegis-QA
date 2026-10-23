@@ -109,3 +109,15 @@ test('Post schema rejects a missing body', () => {
     ).toBe(true);
   }
 });
+
+test('Post schema rejects unknown fields', () => {
+  const postWithExtraField = {
+    userId: 1,
+    id: 1,
+    title: 'Example post',
+    body: 'Example content',
+    admin: true,
+  };
+
+  expect(() => postSchema.parse(postWithExtraField)).toThrow(ZodError);
+});
