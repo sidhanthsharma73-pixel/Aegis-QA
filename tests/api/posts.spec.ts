@@ -79,3 +79,14 @@ test('Post schema rejects an invalid title type', () => {
   };
   expect(() => postSchema.parse(invalidPost)).toThrow();
 });
+
+test('Post schema rejects an empty title', () => {
+  const invalidPost = {
+    userId: 1,
+    id: 1,
+    title: '',
+    body: 'Example content',
+  };
+
+  expect(() => postSchema.parse(invalidPost)).toThrow();
+});
