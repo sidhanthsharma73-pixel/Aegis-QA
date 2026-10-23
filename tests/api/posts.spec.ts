@@ -2,6 +2,7 @@ import { postSchema } from './post.schema';
 import { test, expect } from '@playwright/test';
 import { PostsApi } from './posts.api';
 import type { Post } from './post.schema';
+import { ZodError } from 'zod';
 
 test('GET /posts/1 returns a valid post', async ({ request }) => {
   const postsApi = new PostsApi(request);
@@ -10,8 +11,8 @@ test('GET /posts/1 returns a valid post', async ({ request }) => {
 
   expect(response.status()).toBe(200);
 
-  const body: Post = await response.json();
-  postSchema.parse(body);
+  const rawBody: unknown = await response.json();
+  const body: Post = postSchema.parse(rawBody);
   expect(body.userId).toEqual(expect.any(Number));
   expect(body.id).toBe(1);
   expect(typeof body.title).toBe('string');
@@ -28,8 +29,8 @@ test('GET /posts/2 returns the correct post', async ({ request }) => {
 
   expect(response.status()).toBe(200);
 
-  const body: Post = await response.json();
-  postSchema.parse(body);
+  const rawBody: unknown = await response.json();
+  const body: Post = postSchema.parse(rawBody);
 
 
   expect(body.id).toBe(2);
@@ -77,7 +78,7 @@ test('Post schema rejects an invalid title type', () => {
     title: 123,
     body: 'Example content',
   };
-  expect(() => postSchema.parse(invalidPost)).toThrow();
+  expect(() => postSchema.parse(invalidPost)).toThrow(ZodError);
 });
 
 test('Post schema rejects an empty title', () => {
@@ -88,7 +89,7 @@ test('Post schema rejects an empty title', () => {
     body: 'Example content',
   };
 
-  expect(() => postSchema.parse(invalidPost)).toThrow();
+  expect(() => postSchema.parse(invalidPost)).toThrow(ZodError);
 });
 
 test('Post schema rejects a missing body', () => {
@@ -98,5 +99,5 @@ test('Post schema rejects a missing body', () => {
     title: 'Example post',
   };
 
-  expect(() => postSchema.parse(invalidPost)).toThrow();
+  expect(() => postSchema.parse(invalidPost)).toThrow(ZodError);
 });
