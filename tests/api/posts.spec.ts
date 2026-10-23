@@ -99,5 +99,13 @@ test('Post schema rejects a missing body', () => {
     title: 'Example post',
   };
 
-  expect(() => postSchema.parse(invalidPost)).toThrow(ZodError);
+  const result = postSchema.safeParse(invalidPost);
+
+  expect(result.success).toBe(false);
+
+  if (!result.success) {
+    expect(
+      result.error.issues.some(issue => issue.path[0] === 'body')
+    ).toBe(true);
+  }
 });
