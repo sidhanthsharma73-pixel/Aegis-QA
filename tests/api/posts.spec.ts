@@ -119,5 +119,17 @@ test('Post schema rejects unknown fields', () => {
     admin: true,
   };
 
-  expect(() => postSchema.parse(postWithExtraField)).toThrow(ZodError);
+  const result = postSchema.safeParse(postWithExtraField);
+
+  expect(result.success).toBe(false);
+
+  if (!result.success) {
+    const issue = result.error.issues[0];
+
+    expect(issue.code).toBe('unrecognized_keys');
+
+    if (issue.code === 'unrecognized_keys') {
+      expect(issue.keys).toContain('admin');
+    }
+  }
 });
