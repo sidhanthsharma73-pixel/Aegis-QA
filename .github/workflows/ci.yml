@@ -1,0 +1,19 @@
+name: Aegis QA CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  first-workflow:
+    name: First GitHub Actions Workflow
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Confirm workflow execution
+        run: echo "Aegis QA GitHub Actions is working!"
