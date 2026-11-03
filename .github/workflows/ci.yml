@@ -28,6 +28,8 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        run: npx playwright test
 
       - name: Confirm workflow execution
         run: echo "Aegis QA GitHub Actions is working!"
