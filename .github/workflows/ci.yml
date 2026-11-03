@@ -26,5 +26,8 @@ jobs:
       - name: TypeScript type check
         run: npx tsc --noEmit
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Confirm workflow execution
         run: echo "Aegis QA GitHub Actions is working!"
